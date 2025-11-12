@@ -2,6 +2,7 @@ package de.zannagh.armorhider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import de.zannagh.armorhider.net.SettingsC2SPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -18,10 +19,15 @@ public final class ClientConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path FILE = new File("config", "armor-hider.json").toPath();
 
-    private static PlayerConfig CURRENT = PlayerConfig.defaults(UUID.randomUUID());
+    private static PlayerConfig CURRENT = PlayerConfig.defaults(UUID.randomUUID(), "dummy");
     
     private static Map<UUID, PlayerConfig> SERVERCONFIG = new HashMap<>();
 
+    public static void updateName(String name){
+        CURRENT.playerName = name;
+        save();
+    }
+    
     public static void load() {
         try {
             if (Files.exists(FILE)) {
@@ -69,4 +75,18 @@ public final class ClientConfigManager {
 
     public static PlayerConfig get() { return CURRENT; }
     public static void set(PlayerConfig cfg) { CURRENT = cfg; save(); }
+
+    public static PlayerConfig getConfigForPlayer(UUID playerId) {
+        if (playerId == null) {
+            return CURRENT;
+        }
+        return SERVERCONFIG.getOrDefault(playerId, CURRENT);
+    }
+
+    public static PlayerConfig getConfigForPlayerByName(String playerName) {
+        if (playerName == null) {
+            return CURRENT;
+        }
+        return SERVERCONFIG.values().stream().filter(c -> c.playerName.equalsIgnoreCase(playerName)).findFirst().orElse(CURRENT);
+    }
 }

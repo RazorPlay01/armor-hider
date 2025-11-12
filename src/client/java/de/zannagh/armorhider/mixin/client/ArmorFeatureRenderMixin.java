@@ -1,5 +1,6 @@
 package de.zannagh.armorhider.mixin.client;
 
+import de.zannagh.armorhider.ArmorModificationInfo;
 import de.zannagh.armorhider.ArmorTransparencyHelper;
 import de.zannagh.armorhider.ClientConfigManager;
 import de.zannagh.armorhider.PlayerConfig;
@@ -10,34 +11,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArmorFeatureRenderer.class)
 public class ArmorFeatureRenderMixin {
-    @Unique
-    private static final ThreadLocal<BipedEntityRenderState> armorHider$currentState = new ThreadLocal<>();
-
-    @Unique
-    private static final ThreadLocal<EquipmentSlot> armorHider$currentSlot = new ThreadLocal<>();
-
-    @Inject(method = "render", at = @At("HEAD"))
-    public <S extends BipedEntityRenderState> void captureRenderState(
-            MatrixStack matrices,
-            OrderedRenderCommandQueue orderedRenderCommandQueue,
-            int light,
-            S bipedEntityRenderState,
-            float limbAngle,
-            float limbDistance,
-            CallbackInfo ci) {
-        armorHider$currentState.set(bipedEntityRenderState);
-    }
-
     @Inject(method = "render", at = @At("RETURN"))
     public void clearRenderState(CallbackInfo ci) {
-        armorHider$currentState.remove();
+        ArmorTransparencyHelper.clearCurrentPlayerContext();
     }
 
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
@@ -49,34 +31,23 @@ public class ArmorFeatureRenderMixin {
             int light,
             BipedEntityRenderState armorModel,
             CallbackInfo ci) {
-        armorHider$currentSlot.set(slot);
 
-        PlayerConfig config = ClientConfigManager.get();
-        double transparency = armorHider$getTransparencyForSlot(slot, config);
+        PlayerConfig config = ClientConfigManager.getConfigForPlayer(ArmorTransparencyHelper.getCurrentPlayerUuid());
+        var modificationInfo = new ArmorModificationInfo(slot, config);
         
-        // If transparency is near 0, completely hide the armor piece
-        if (transparency < 0.01) {
+        if (modificationInfo.ShouldHide()) {
+            ArmorTransparencyHelper.setCurrentSlotInfo(modificationInfo);
             ci.cancel();
             return;
         }
 
-        ArmorTransparencyHelper.setCurrentArmorSlot(slot);
+        if (modificationInfo.ShouldModify()) {
+            ArmorTransparencyHelper.setCurrentSlotInfo(modificationInfo);
+        }
     }
 
     @Inject(method = "renderArmor", at = @At("RETURN"))
     private void clearSlot(CallbackInfo ci) {
-        armorHider$currentSlot.remove();
         ArmorTransparencyHelper.clearCurrentArmorSlot();
-    }
-
-    @Unique
-    private static double armorHider$getTransparencyForSlot(EquipmentSlot slot, PlayerConfig config) {
-        return switch (slot) {
-            case HEAD -> config.helmetTransparency;
-            case CHEST -> config.chestTransparency;
-            case LEGS -> config.legsTransparency;
-            case FEET -> config.bootsTransparency;
-            default -> 1.0;
-        };
     }
 }

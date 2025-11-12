@@ -19,6 +19,7 @@ public record SettingsS2CPacket(List<PlayerConfig> config) implements CustomPayl
             PacketCodecs.DOUBLE, pc -> pc.legsTransparency,
             PacketCodecs.DOUBLE, pc -> pc.bootsTransparency,
             PacketCodecs.STRING, pc -> pc.playerId.toString(),
+            PacketCodecs.STRING, pc -> pc.playerName,
             PlayerConfig::FromPacket
     );
 

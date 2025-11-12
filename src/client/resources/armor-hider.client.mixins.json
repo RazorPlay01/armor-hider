@@ -4,8 +4,8 @@
 	"compatibilityLevel": "JAVA_21",
 	"client": [
       "ArmorFeatureRenderMixin",
-      "ModelPartMixin",
-      "EquipmentRenderMixin"
+      "EquipmentRenderMixin",
+      "LivingEntityRenderMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

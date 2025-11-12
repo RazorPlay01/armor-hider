@@ -24,6 +24,9 @@ public class ArmorhiderClient implements ClientModInitializer {
         });
         ClientConfigManager.load();
         ClientPlayConnectionEvents.JOIN.register((handler,  packetSender,  client) ->{
+            assert client.player != null;
+            var playerName = client.player.getName().getString();
+            ClientConfigManager.updateName(playerName);
             ClientPlayNetworking.send(new SettingsC2SPacket(ClientConfigManager.get()));
         });
 	}

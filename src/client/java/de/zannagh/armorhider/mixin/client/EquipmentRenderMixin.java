@@ -1,6 +1,8 @@
 package de.zannagh.armorhider.mixin.client;
 
 import de.zannagh.armorhider.ArmorTransparencyHelper;
+import de.zannagh.armorhider.Armorhider;
+import de.zannagh.armorhider.ArmorhiderClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
@@ -20,9 +22,12 @@ public class EquipmentRenderMixin {
     at = @At("HEAD"))
     private <S> void changeTransparencyIfApplicable(EquipmentModel.LayerType layerType, RegistryKey<EquipmentAsset> assetKey, Model<? super S> model, S object, ItemStack itemStack, MatrixStack matrixStack, OrderedRenderCommandQueue orderedRenderCommandQueue, int i, int j, CallbackInfo ci)
     {
-        if (ArmorTransparencyHelper.getCurrentArmorSlot() == null)
+        var currentSlotInfo = ArmorTransparencyHelper.getCurrentSlotInfo();
+        if (currentSlotInfo == null)
         {
             return;
         }
+        double transparency = currentSlotInfo.GetTransparency();
+        // TODO: Modify transparency here.
     }
 }

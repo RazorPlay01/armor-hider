@@ -22,7 +22,8 @@ public record SettingsC2SPacket(PlayerConfig config) implements CustomPayload {
             PacketCodecs.DOUBLE, c -> c.config().legsTransparency,
             PacketCodecs.DOUBLE, c -> c.config().bootsTransparency,
             PacketCodecs.STRING, c -> c.config().playerId.toString(),
-            (helmet, chest, legs, boots, uuid) -> new SettingsC2SPacket(PlayerConfig.FromPacket(helmet, chest, legs, boots, uuid))
+            PacketCodecs.STRING, c -> c.config().playerName,
+            (helmet, chest, legs, boots, uuid, playerName) -> new SettingsC2SPacket(PlayerConfig.FromPacket(helmet, chest, legs, boots, uuid, playerName))
     );
     @Override
     public CustomPayload.Id<? extends CustomPayload> getId() {

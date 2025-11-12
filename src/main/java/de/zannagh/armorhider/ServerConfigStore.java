@@ -64,7 +64,7 @@ public final class ServerConfigStore {
     }
 
     public PlayerConfig get(UUID uuid) {
-        return data.getOrDefault(uuid, PlayerConfig.defaults(uuid));
+        return data.getOrDefault(uuid, PlayerConfig.defaults(uuid, "dummy"));
     }
 
     public void put(UUID uuid, PlayerConfig cfg) {
