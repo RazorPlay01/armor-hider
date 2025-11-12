@@ -1,9 +1,10 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nimbusds.oauth2.sdk.util.CollectionUtils;
-import de.zannagh.armorhider.net.SettingsC2SPacket;
+import de.zannagh.armorhider.ArmorHider;
+import de.zannagh.armorhider.resources.PlayerConfig;
+import de.zannagh.armorhider.netPackets.SettingsC2SPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 
@@ -75,15 +76,15 @@ public final class ClientConfigManager {
                     PlayerConfig c = GSON.fromJson(r, PlayerConfig.class);
                     if (c != null) {
                         CURRENT = c;
-                        Armorhider.LOGGER.info("Loaded client config from file.");
-                        Armorhider.LOGGER.info("Current config: {}", GSON.toJson(CURRENT));
+                        ArmorHider.LOGGER.info("Loaded client config from file.");
+                        ArmorHider.LOGGER.info("Current config: {}", GSON.toJson(CURRENT));
                     }
                 }
             } else {
                 save();
             }
         } catch (IOException e) {
-            Armorhider.LOGGER.error("Failed to load client config!", e);
+            ArmorHider.LOGGER.error("Failed to load client config!", e);
         }
     }
 
@@ -92,22 +93,22 @@ public final class ClientConfigManager {
             Files.createDirectories(FILE.getParent());
             try (Writer w = Files.newBufferedWriter(FILE)) {
                 GSON.toJson(CURRENT, w);
-                Armorhider.LOGGER.info("Saved client config to file.");
+                ArmorHider.LOGGER.info("Saved client config to file.");
                 if (MinecraftClient.getInstance().isConnectedToLocalServer() || MinecraftClient.getInstance().getServer() != null) {
-                    Armorhider.LOGGER.info("Sending to server...");
+                    ArmorHider.LOGGER.info("Sending to server...");
                     ClientPlayNetworking.send(new SettingsC2SPacket(get()));
-                    Armorhider.LOGGER.info("Saved client config and sent to server. New config is {}", GSON.toJson(CURRENT));
+                    ArmorHider.LOGGER.info("Saved client config and sent to server. New config is {}", GSON.toJson(CURRENT));
                 }
             }
         } catch (IOException e) {
-            Armorhider.LOGGER.error("Failed to save client config!", e);
+            ArmorHider.LOGGER.error("Failed to save client config!", e);
         }
     }
     
     public static Map<UUID, PlayerConfig> getServerConfig(){ return SERVERCONFIG; }
     
     public static void setServerConfig(List<PlayerConfig> serverConfig) {
-        Armorhider.LOGGER.info("Setting server config to {}", GSON.toJson(serverConfig));
+        ArmorHider.LOGGER.info("Setting server config to {}", GSON.toJson(serverConfig));
         SERVERCONFIG = new HashMap<>();
         serverConfig.forEach(c -> {
             SERVERCONFIG.put(c.playerId, c);

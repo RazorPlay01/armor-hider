@@ -1,8 +1,10 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.mixinStatics;
+
+import de.zannagh.armorhider.resources.ArmorModificationInfo;
 
 import java.util.UUID;
 
-public class ArmorTransparencyHelper {
+public final class ArmorTransparencyHelper {
     private static final ThreadLocal<ArmorModificationInfo> currentArmorSlot = ThreadLocal.withInitial(() -> null);
     private static final ThreadLocal<UUID> currentPlayerUuid = ThreadLocal.withInitial(() -> null);
 

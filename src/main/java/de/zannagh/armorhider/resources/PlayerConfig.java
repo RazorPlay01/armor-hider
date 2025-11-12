@@ -1,5 +1,5 @@
 
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.resources;
 
 import java.util.UUID;
 
@@ -20,10 +20,10 @@ public class PlayerConfig {
         playerId = uuid;
         playerName = name;
     }
-    public double helmetTransparency = 0.0;
-    public double chestTransparency = 0.0;
-    public double legsTransparency = 0.90;
-    public double bootsTransparency = 0.0;
+    public double helmetTransparency = 1.0;
+    public double chestTransparency = 1.0;
+    public double legsTransparency = 1.0;
+    public double bootsTransparency = 1.0;
     public UUID playerId;
     public String playerName;
     public static PlayerConfig defaults(UUID playerId, String playerName) { return new PlayerConfig(playerId, playerName); }

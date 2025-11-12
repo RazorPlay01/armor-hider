@@ -1,4 +1,4 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.ui;
 
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 

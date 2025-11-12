@@ -1,8 +1,9 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.resources;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import de.zannagh.armorhider.ArmorHider;
 
 import java.io.File;
 import java.io.Reader;
@@ -39,15 +40,15 @@ public final class ServerConfigStore {
                     Map<UUID, PlayerConfig> m = GSON.fromJson(r, MAP_TYPE);
                     if (m != null) {
                         data = m;
-                        Armorhider.LOGGER.info("Loaded server config.");
+                        ArmorHider.LOGGER.info("Loaded server config.");
                     }
                 }
             } else {
                 save();
-                Armorhider.LOGGER.info("Setup server config.");
+                ArmorHider.LOGGER.info("Setup server config.");
             }
         } catch (Exception e) {
-            Armorhider.LOGGER.error("Server config load failed", e);
+            ArmorHider.LOGGER.error("Server config load failed", e);
         }
     }
 
@@ -56,10 +57,10 @@ public final class ServerConfigStore {
             Files.createDirectories(file.getParent());
             try (Writer w = Files.newBufferedWriter(file)) {
                 GSON.toJson(data, MAP_TYPE, w);
-                Armorhider.LOGGER.info("Saved server config.");
+                ArmorHider.LOGGER.info("Saved server config.");
             }
         } catch (Exception e) {
-            Armorhider.LOGGER.error("Server config save failed", e);
+            ArmorHider.LOGGER.error("Server config save failed", e);
         }
     }
 

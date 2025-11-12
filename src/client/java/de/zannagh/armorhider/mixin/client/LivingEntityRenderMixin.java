@@ -1,6 +1,6 @@
 package de.zannagh.armorhider.mixin.client;
 
-import de.zannagh.armorhider.ArmorTransparencyHelper;
+import de.zannagh.armorhider.mixinStatics.ArmorTransparencyHelper;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,9 +1,9 @@
 package de.zannagh.armorhider.mixin.client;
 
-import de.zannagh.armorhider.ArmorModificationInfo;
-import de.zannagh.armorhider.ArmorTransparencyHelper;
-import de.zannagh.armorhider.ClientConfigManager;
-import de.zannagh.armorhider.PlayerConfig;
+import de.zannagh.armorhider.resources.ArmorModificationInfo;
+import de.zannagh.armorhider.mixinStatics.ArmorTransparencyHelper;
+import de.zannagh.armorhider.config.ClientConfigManager;
+import de.zannagh.armorhider.resources.PlayerConfig;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
@@ -17,11 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArmorFeatureRenderer.class)
 public class ArmorFeatureRenderMixin {
-    @Inject(method = "render", at = @At("RETURN"))
-    public void clearRenderState(CallbackInfo ci) {
-        ArmorTransparencyHelper.clearCurrentPlayerContext();
-    }
-
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
     private void captureSlotAndCheckHide(
             MatrixStack matrices,
@@ -49,5 +44,10 @@ public class ArmorFeatureRenderMixin {
     @Inject(method = "renderArmor", at = @At("RETURN"))
     private void clearSlot(CallbackInfo ci) {
         ArmorTransparencyHelper.clearCurrentArmorSlot();
+    }
+
+    @Inject(method = "render", at = @At("RETURN"))
+    public void clearRenderState(CallbackInfo ci) {
+        ArmorTransparencyHelper.clearCurrentPlayerContext();
     }
 }

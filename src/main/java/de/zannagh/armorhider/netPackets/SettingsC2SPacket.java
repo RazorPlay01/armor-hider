@@ -1,8 +1,8 @@
-package de.zannagh.armorhider.net;
+package de.zannagh.armorhider.netPackets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.zannagh.armorhider.PlayerConfig;
+import de.zannagh.armorhider.resources.PlayerConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;

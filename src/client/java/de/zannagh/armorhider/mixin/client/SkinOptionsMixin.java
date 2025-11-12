@@ -1,7 +1,7 @@
 package de.zannagh.armorhider.mixin.client;
 
-import de.zannagh.armorhider.ArmorVisibilityWidgets;
-import de.zannagh.armorhider.ClientConfigManager;
+import de.zannagh.armorhider.ui.ArmorVisibilityWidgets;
+import de.zannagh.armorhider.config.ClientConfigManager;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.SkinOptionsScreen;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;

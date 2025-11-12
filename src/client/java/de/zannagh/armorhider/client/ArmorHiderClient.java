@@ -1,24 +1,25 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.client;
 
-import de.zannagh.armorhider.net.SettingsC2SPacket;
-import de.zannagh.armorhider.net.SettingsS2CPacket;
+import de.zannagh.armorhider.ArmorHider;
+import de.zannagh.armorhider.config.ClientConfigManager;
+import de.zannagh.armorhider.netPackets.SettingsC2SPacket;
+import de.zannagh.armorhider.netPackets.SettingsS2CPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 
-public class ArmorhiderClient implements ClientModInitializer {
+public class ArmorHiderClient implements ClientModInitializer {
     
     @Override
 	public void onInitializeClient() {
-        Armorhider.LOGGER.info("Armor Hider client initializing...");
+        ArmorHider.LOGGER.info("Armor Hider client initializing...");
         ClientPlayNetworking.registerGlobalReceiver(SettingsS2CPacket.IDENTIFIER, (payload, context) -> {
-            Armorhider.LOGGER.info("Armor Hider received configuration from server.");
+            ArmorHider.LOGGER.info("Armor Hider received configuration from server.");
             
             var config = payload.config();
             
             if (config == null) {
-                Armorhider.LOGGER.error("Failed to load settings packet.");
+                ArmorHider.LOGGER.error("Failed to load settings packet.");
             }
             
             context.client().execute(() -> ClientConfigManager.setServerConfig(config));

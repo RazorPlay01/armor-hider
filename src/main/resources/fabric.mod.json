@@ -16,10 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"de.zannagh.armorhider.Armorhider"
+          "de.zannagh.armorhider.ArmorHider"
 		],
 		"client": [
-			"de.zannagh.armorhider.ArmorhiderClient"
+          "de.zannagh.armorhider.client.ArmorHiderClient"
 		]
 	},
 	"mixins": [

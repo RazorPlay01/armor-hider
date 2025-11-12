@@ -1,4 +1,4 @@
-package de.zannagh.armorhider;
+package de.zannagh.armorhider.resources;
 
 import net.minecraft.entity.EquipmentSlot;
 
