@@ -1,4 +1,5 @@
 version-in-branch-pattern: (\A(?!x)x)
+tag-prefix: '[vV]?(\d\.\d\d.\d\d)?-?'
 strategies:
   - Fallback
   - ConfiguredNextVersion
@@ -32,3 +33,10 @@ branches:
     pre-release-weight: 0
     prevent-increment:
       when-current-commit-tagged: true
+ignore:
+  paths:
+    - ".*.github.*"
+    - ".*README.md.*"
+    - ".*SECURITY.md.*"
+    - ".*contributing.md.*"
+    - ".*GitVersion.yml.*"
