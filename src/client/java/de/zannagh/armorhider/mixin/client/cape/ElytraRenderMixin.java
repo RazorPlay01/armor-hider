@@ -23,18 +23,27 @@ public class ElytraRenderMixin {
         ArmorHiderClient.trySetCurrentSlotFromEntityRenderState(bipedEntityRenderState);
 
         if (ArmorHiderClient.CurrentArmorMod.get() == null) {
+            ArmorHiderClient.CurrentSlot.remove();
             return;
         }
 
         if (!ArmorHiderClient.CurrentArmorMod.get().ShouldModify()) {
+            ArmorHiderClient.CurrentArmorMod.remove();
+            ArmorHiderClient.CurrentSlot.remove();
             return;
         }
 
         if (ArmorHiderClient.CurrentArmorMod.get().ShouldHide()) {
+            ArmorHiderClient.CurrentArmorMod.remove();
+            ArmorHiderClient.CurrentSlot.remove();
             if (ci != null) {
                 ci.cancel();
             }
+            return;
         }
+
+        ArmorHiderClient.CurrentArmorMod.remove();
+        ArmorHiderClient.CurrentSlot.remove();
     }
 
     @Inject(
