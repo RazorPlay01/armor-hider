@@ -1,5 +1,7 @@
 package de.zannagh.armorhider;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.zannagh.armorhider.common.EnrichedLogger;
 import de.zannagh.armorhider.net.CommsManager;
 import de.zannagh.armorhider.net.ServerRuntime;
@@ -12,6 +14,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.slf4j.LoggerFactory;
 
 public class ArmorHider implements ModInitializer {
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	public static final String MOD_ID = "armor-hider";
 	public static final EnrichedLogger LOGGER = new EnrichedLogger(LoggerFactory.getLogger(MOD_ID));
 
@@ -27,8 +30,6 @@ public class ArmorHider implements ModInitializer {
                 ServerRuntime.store.save();
             }
         });
-        PayloadTypeRegistry.playC2S().register(SettingsC2SPacket.IDENTIFIER, SettingsC2SPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(SettingsS2CPacket.IDENTIFIER, SettingsS2CPacket.PACKET_CODEC);
         CommsManager.initServer();
         LOGGER.info("Armor Hider initialized.");
 	}

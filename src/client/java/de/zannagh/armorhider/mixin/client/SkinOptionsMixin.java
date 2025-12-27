@@ -6,7 +6,9 @@
 
 package de.zannagh.armorhider.mixin.client;
 
+import de.zannagh.armorhider.client.ArmorHiderClient;
 import de.zannagh.armorhider.config.ClientConfigManager;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.SkinOptionsScreen;
 import net.minecraft.client.gui.widget.OptionListWidget;
@@ -19,10 +21,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameOptionsScreen.class)
-public abstract class SkinOptionsMixin {
+public abstract class SkinOptionsMixin extends Screen {
 
     @Shadow
     protected OptionListWidget body;
+
+    protected SkinOptionsMixin(Text title) {
+        super(title);
+    }
 
     @Inject(method = "init", at = @At("RETURN"))
     private void onAddOptions(CallbackInfo ci) {
@@ -93,5 +99,25 @@ public abstract class SkinOptionsMixin {
         );
 
         body.addSingleOptionEntry(bootsOption);
+
+        SimpleOption<Boolean> enableCombatHiding = SimpleOption.ofBoolean(
+                "Armor Hider Combat Detection",
+                SimpleOption.constantTooltip(Text.literal("Enables detection of combat to show your armor when you are in combat.")),
+                (Text, Value) -> net.minecraft.text.Text.literal(Value ? "Enabled" : "Disabled"),
+                ClientConfigManager.get().enableCombatDetection,
+                ClientConfigManager::setCombatDetection
+        );
+        body.addSingleOptionEntry(enableCombatHiding);
+        
+        if (ArmorHiderClient.isCurrentPlayerSinglePlayerHostOrAdmin) {
+            SimpleOption<Boolean> combatHidingOnServer = SimpleOption.ofBoolean(
+                    "Armor Hider Combat Detection (Server)",
+                    SimpleOption.constantTooltip(Text.literal("Enables detection of combat server-wide to force showing armor when a player is in combat. If enabled, this will override individual's detection setting.")),
+                    (Text, Value) -> net.minecraft.text.Text.literal(Value ? "Enabled" : "Disabled"),
+                    ClientConfigManager.getServerConfig().enableCombatDetection,
+                    ClientConfigManager::setAndSendServerCombatDetection
+            );
+            body.addSingleOptionEntry(combatHidingOnServer);
+        }
     }
 }
